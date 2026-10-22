@@ -32,7 +32,7 @@ Thumbs.db
 /*.mp4
 frontend/public/ref.mp4
 frontend/public/videos/
-!frontend/font-icons/*.png
+!frontend/src/assets/font-icons/*.png
 !frontend/public/font-icons/*.png
 !frontend/public/images/hero-images/*.jpg
 !frontend/public/images/services-images/*.jpg
