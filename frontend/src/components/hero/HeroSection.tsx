@@ -1,0 +1,235 @@
+import React, { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { LacrownWordmark } from './LacrownWordmark';
+import { HeroImageCollage } from './HeroImageCollage';
+import { ClinicHeadline } from './ClinicHeadline';
+import { HeroHeader } from '../ui/HeroHeader';
+import { MenuDrawer } from '../ui/MenuDrawer';
+import { WhatsAppModal } from '../ui/WhatsAppModal';
+import { BookingModal } from '../ui/BookingModal';
+import { RotateCcw, Calendar, ArrowUpRight } from 'lucide-react';
+
+export interface HeroSectionProps {
+  onOpenBooking?: () => void;
+  onOpenWhatsApp?: () => void;
+  onOpenMenu?: () => void;
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({
+  onOpenBooking,
+  onOpenWhatsApp,
+  onOpenMenu,
+}) => {
+  const [internalMenuOpen, setInternalMenuOpen] = useState(false);
+  const [internalWhatsAppOpen, setInternalWhatsAppOpen] = useState(false);
+  const [internalBookingOpen, setInternalBookingOpen] = useState(false);
+  const [animationKey, setAnimationKey] = useState(0);
+  const [isPinkTheme, setIsPinkTheme] = useState(false);
+  const [isBottomInteractive, setIsBottomInteractive] = useState(true);
+
+  const handleOpenMenu = onOpenMenu || (() => setInternalMenuOpen(true));
+  const handleOpenWhatsApp = onOpenWhatsApp || (() => setInternalWhatsAppOpen(true));
+  const handleOpenBooking = onOpenBooking || (() => setInternalBookingOpen(true));
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Master scrubbed scroll progress across the pinned hero + services track (680vh)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  });
+
+  // Seamless background interpolation:
+  // 1. Off-white (#FFF8F6) during opening hero collage & collapse (0.00 to 0.14)
+  // 2. Interpolates to vivid brand pink (#E63886) during reverse-carousel reveal (0.14 to 0.22)
+  // 3. STABLE HOLD at vivid brand pink (#E63886) for video showcase (0.22 to 0.36)
+  // 4. Handoff to deep forest green (#00552F) (Service 1: Hair Treatment) (0.36 to 0.38)
+  // 5. Service 2: Skin Treatment (#F6D5DE) (0.57 to 0.64)
+  // 6. Service 3: Facial (#FAF3ED) (0.68 to 0.76)
+  // 7. Service 4: Anti-Ageing Treatment (#C56882) (0.80 to 0.87)
+  // 8. Service 5: Slimming Treatment (#D1C4B5) (0.91 to 0.96)
+  // 9. Service 6: Semi-Permanent Make Up (#E63886) (0.98 to 1.00)
+  const backgroundColor = useTransform(
+    scrollYProgress,
+    [
+      0.0,
+      0.14,
+      0.22,
+      0.36,
+      0.38, 0.53,
+      0.57, 0.64,
+      0.68, 0.76,
+      0.80, 0.87,
+      0.91, 0.96,
+      0.98,
+      1.0,
+    ],
+    [
+      '#FFF8F6', // 0.00: Hero off-white
+      '#FFF8F6', // 0.14: Hero off-white hold
+      '#E63886', // 0.22: Video arrives (vivid pink)
+      '#E63886', // 0.36: Video showcase hold (vivid pink)
+      '#00552F', // 0.38: Service 1 Hair Treatment (deep forest green)
+      '#00552F', // 0.53: Service 1 hold (deep forest green)
+      '#F6D5DE', // 0.57: Service 2 Skin Treatment (soft blush pink)
+      '#F6D5DE', // 0.64: Service 2 hold (soft blush pink)
+      '#FAF3ED', // 0.68: Service 3 Facial (warm cream)
+      '#FAF3ED', // 0.76: Service 3 hold (warm cream)
+      '#C56882', // 0.80: Service 4 Anti-Ageing (muted rose)
+      '#C56882', // 0.87: Service 4 hold (muted rose)
+      '#D1C4B5', // 0.91: Service 5 Slimming (cashmere taupe)
+      '#D1C4B5', // 0.96: Service 5 hold (cashmere taupe)
+      '#E63886', // 0.98: Service 6 Semi-Permanent Makeup (brand pink)
+      '#E63886', // 1.00: Service 6 hold (brand pink)
+    ]
+  );
+
+  // Stage C: Oversized LACROWN wordmark travels continuously UPWARD with the scroll
+  // Exits naturally through the top of the viewport
+  const wordmarkY = useTransform(scrollYProgress, [0.0, 0.18], ['0%', '-140%']);
+  const wordmarkOpacity = useTransform(scrollYProgress, [0.0, 0.14, 0.18], [1, 1, 0]);
+
+  // Stage C: Left-side headline & eyebrow travel continuously UPWARD through the viewport
+  const headlineY = useTransform(scrollYProgress, [0.0, 0.18], [-100, -420]);
+  const headlineOpacity = useTransform(scrollYProgress, [0.0, 0.14, 0.18], [1, 1, 0]);
+
+  // Right-side boutique actions travel continuously UPWARD through the viewport
+  const boutiqueY = useTransform(scrollYProgress, [0.0, 0.18], [0, -360]);
+  const boutiqueOpacity = useTransform(scrollYProgress, [0.0, 0.14, 0.18], [1, 1, 0]);
+
+  // Subtle vertical centering adjustment for collage as wordmark leaves, holding throughout showcase & all services
+  const collageTranslateY = useTransform(
+    scrollYProgress,
+    [0.0, 0.18, 1.0],
+    ['20px', '-20px', '-20px']
+  );
+
+  // Reactive listener to toggle header contrast buttons when on dark background stages:
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    const isDark =
+      (latest >= 0.20 && latest <= 0.56) ||
+      (latest >= 0.76 && latest <= 0.86) ||
+      (latest >= 0.96);
+    setIsPinkTheme(isDark);
+    setIsBottomInteractive(latest < 0.10);
+  });
+
+  const handleReplayAnimation = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setAnimationKey((prev) => prev + 1);
+  };
+
+  return (
+    <div ref={containerRef} className="relative w-full h-[850vh]">
+      {/* PINNED HERO & SERVICES VIEWPORT: Sticky for the duration of the 680vh track */}
+      <motion.section
+        style={{ backgroundColor }}
+        className="sticky top-0 w-full h-[100svh] min-h-[580px] max-h-[1100px] flex flex-col justify-between overflow-hidden select-none"
+      >
+        {/* Editorial background subtle grain texture */}
+        <div className="absolute inset-0 editorial-texture opacity-30 pointer-events-none z-0" />
+
+        {/* TOP HEADER CONTROLS (Menu on left, WhatsApp on right, contrast-aware across themes) */}
+        <HeroHeader
+          onOpenMenu={handleOpenMenu}
+          onOpenWhatsApp={handleOpenWhatsApp}
+          isPinkTheme={isPinkTheme}
+        />
+
+        {/* REFINED BRAND WORDMARK: Below header controls, animates upward in Stage C */}
+        <motion.div
+          style={{ y: wordmarkY, opacity: wordmarkOpacity }}
+          className="absolute top-[64px] sm:top-[68px] md:top-[72px] left-0 right-0 w-full flex justify-center items-center pointer-events-none select-none z-10"
+          aria-hidden="true"
+        >
+          <LacrownWordmark />
+        </motion.div>
+
+        {/* CENTER STAGE: Overlapping 3-Image Collage, Video Card & Continuous Services Carousel */}
+        <motion.div
+          style={{ y: collageTranslateY }}
+          className="relative z-20 flex-1 flex items-center justify-center w-full px-4 my-auto"
+        >
+          <HeroImageCollage
+            scrollYProgress={scrollYProgress}
+            animationKey={animationKey}
+            onOpenBooking={handleOpenBooking}
+          />
+        </motion.div>
+
+        {/* BOTTOM REGION: Clinic Headline (Left) & Refined Boutique Actions (Right) */}
+        <div
+          className={`relative z-[15] w-full px-6 pb-5 sm:px-8 sm:pb-6 md:px-12 md:pb-6 lg:pb-7 flex flex-col md:flex-row md:items-end justify-between gap-4 ${
+            isBottomInteractive ? 'pointer-events-auto' : 'pointer-events-none'
+          }`}
+        >
+          {/* Lower-Left Zone: Headline moves UPWARD as user scrolls downward */}
+          <motion.div
+            style={{ y: headlineY, opacity: headlineOpacity }}
+            className="pointer-events-auto max-w-lg -translate-y-4 sm:-translate-y-5"
+          >
+            <ClinicHeadline onOpenBooking={handleOpenBooking} />
+          </motion.div>
+
+          {/* Lower-Right: Minimal Boutique Actions move UPWARD */}
+          <motion.div
+            style={{ y: boutiqueY, opacity: boutiqueOpacity }}
+            className="pointer-events-auto flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-2 text-left md:text-right"
+          >
+            {/* Action Controls */}
+            <div className="flex items-center gap-2">
+              {/* Replay Reveal Trigger */}
+              <button
+                type="button"
+                onClick={handleReplayAnimation}
+                title="Scroll to top and replay reveal"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FCE7EE]/90 hover:bg-[#F9D0DF] border border-[#F4DCE3] text-[#00552F] text-xs font-semibold tracking-wide transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-[#00552F] cursor-pointer"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-[#E63886]" />
+                <span>Replay Reveal</span>
+              </button>
+
+              {/* Quick Consultation CTA */}
+              <button
+                type="button"
+                onClick={handleOpenBooking}
+                className="group flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#00552F] hover:bg-[#003E22] text-[#FFF8F6] text-xs font-semibold tracking-wide transition-all shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-[#00552F] cursor-pointer"
+              >
+                <Calendar className="w-3.5 h-3.5 text-[#F49AB9]" />
+                <span>Consultation</span>
+                <ArrowUpRight className="w-3.5 h-3.5 text-[#F49AB9] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </button>
+            </div>
+
+            {/* Boutique Coordinates */}
+            <p className="text-[11px] text-[#8F7A82] tracking-wide">
+              Suite 400 &bull; Aesthetic Medicine &bull; Mon–Sat 9AM–8PM
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Accessible Modals and Drawers (Rendered internally if not supplied by parent) */}
+        {!onOpenBooking && (
+          <>
+            <MenuDrawer
+              isOpen={internalMenuOpen}
+              onClose={() => setInternalMenuOpen(false)}
+              onOpenBooking={() => setInternalBookingOpen(true)}
+              onOpenWhatsApp={() => setInternalWhatsAppOpen(true)}
+            />
+
+            <WhatsAppModal
+              isOpen={internalWhatsAppOpen}
+              onClose={() => setInternalWhatsAppOpen(false)}
+            />
+
+            <BookingModal
+              isOpen={internalBookingOpen}
+              onClose={() => setInternalBookingOpen(false)}
+            />
+          </>
+        )}
+      </motion.section>
+    </div>
+  );
+};

@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-warm: #FFF8F6;
+    --lacrown-green: #00552F;
+    --lacrown-pink: #E63886;
+    --lacrown-pink-soft: #F49AB9;
+  }
+
+  html, body {
+    background-color: var(--bg-warm);
+    color: #1A1A1A;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  ::selection {
+    background: #E63886;
+    color: #FFFFFF;
+  }
+}
+
+/* Condensed Display Typography for ACROW middle text */
+.brand-condensed-acrow {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: #00552F;
+  line-height: 0.85;
+  text-transform: uppercase;
+  display: inline-block;
+  user-select: none;
+}
+
+/* Service Showcase display typography */
+.service-display-heading {
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
+  font-weight: 400;
+  line-height: 0.84;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+/* Custom wordmark container */
+.brand-lockup-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Clinic headline styling */
+.clinic-headline-1 {
+  color: #E63886;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.030em;
+}
+
+.clinic-headline-2 {
+  color: #F49AB9;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.030em;
+}
+
+/* Luxury card shadows */
+.luxury-card-shadow {
+  box-shadow: 0 20px 40px -15px rgba(0, 40, 20, 0.12),
+              0 8px 16px -8px rgba(230, 56, 134, 0.08);
+}
+
+.center-card-shadow {
+  box-shadow: 0 25px 50px -12px rgba(0, 40, 20, 0.2),
+              0 12px 24px -6px rgba(230, 56, 134, 0.1);
+}
+
+/* Subtle editorial texture */
+.editorial-texture {
+  background-image: radial-gradient(rgba(0, 85, 47, 0.02) 1px, transparent 0);
+  background-size: 24px 24px;
+}

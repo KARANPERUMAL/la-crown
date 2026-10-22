@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.vite/
+
+# Production build
+dist/
+build/
+
+# Environment and local configs
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor and OS
+.DS_Store
+Thumbs.db
+*.local
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Temporary and test captures
+.chrome-temp/
+.chrome-temp*/
+*.png
+*.jpg
+*.jpeg
+/*.mp4
+frontend/public/ref.mp4
+frontend/public/videos/
+!frontend/font-icons/*.png
+!frontend/public/font-icons/*.png
+!frontend/public/images/hero-images/*.jpg
+!frontend/public/images/services-images/*.jpg
