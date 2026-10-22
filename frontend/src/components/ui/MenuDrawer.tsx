@@ -90,6 +90,13 @@ export const MenuDrawer: React.FC<MenuDrawerProps> = ({
                   key={idx}
                   onClick={() => {
                     onClose();
+                    if (link.label === 'Specialist Doctors & Team') {
+                      const el = document.getElementById('our-team');
+                      if (el) {
+                        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 250);
+                        return;
+                      }
+                    }
                     onOpenBooking();
                   }}
                   className="group flex items-center justify-between text-left py-2.5 px-3 rounded-xl hover:bg-[#FDE8EF] transition-colors"

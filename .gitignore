@@ -36,3 +36,4 @@ frontend/public/videos/
 !frontend/public/font-icons/*.png
 !frontend/public/images/hero-images/*.jpg
 !frontend/public/images/services-images/*.jpg
+!frontend/public/images/our-team-images/*.jpg

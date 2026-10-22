@@ -42,45 +42,38 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   // Seamless background interpolation:
   // 1. Off-white (#FFF8F6) during opening hero collage & collapse (0.00 to 0.14)
   // 2. Interpolates to vivid brand pink (#E63886) during reverse-carousel reveal (0.14 to 0.22)
-  // 3. STABLE HOLD at vivid brand pink (#E63886) for video showcase (0.22 to 0.36)
-  // 4. Handoff to deep forest green (#00552F) (Service 1: Hair Treatment) (0.36 to 0.38)
-  // 5. Service 2: Skin Treatment (#F6D5DE) (0.57 to 0.64)
-  // 6. Service 3: Facial (#FAF3ED) (0.68 to 0.76)
-  // 7. Service 4: Anti-Ageing Treatment (#C56882) (0.80 to 0.87)
-  // 8. Service 5: Slimming Treatment (#D1C4B5) (0.91 to 0.96)
-  // 9. Service 6: Semi-Permanent Make Up (#E63886) (0.98 to 1.00)
+  // 3. STABLE HOLD at vivid brand pink (#E63886) for video showcase (0.22 to 0.34)
+  // 4. Handoff to deep forest green (#00552F) (Service 1: Hair Treatment) (0.36 to 0.52)
+  // 5. Service 2: Skin Treatment (#F6D5DE) (0.57 to 0.62)
+  // 6. Service 3: Facial (#FAF3ED) (0.67 to 0.72)
+  // 7. Service 4: Anti-Ageing Treatment (#C56882) (0.77 to 0.82)
+  // 8. Service 5: Slimming Treatment (#D1C4B5) (0.87 to 0.92)
+  // 9. Service 6: Semi-Permanent Make Up (#E63886) (0.97 to 1.00)
   const backgroundColor = useTransform(
     scrollYProgress,
     [
       0.0,
       0.14,
       0.22,
-      0.36,
-      0.38, 0.53,
-      0.57, 0.64,
-      0.68, 0.76,
-      0.80, 0.87,
-      0.91, 0.96,
-      0.98,
-      1.0,
+      0.34,
+      0.38, 0.52,
+      0.57, 0.62,
+      0.67, 0.72,
+      0.77, 0.82,
+      0.87, 0.92,
+      0.97, 1.0,
     ],
     [
       '#FFF8F6', // 0.00: Hero off-white
       '#FFF8F6', // 0.14: Hero off-white hold
       '#E63886', // 0.22: Video arrives (vivid pink)
-      '#E63886', // 0.36: Video showcase hold (vivid pink)
-      '#00552F', // 0.38: Service 1 Hair Treatment (deep forest green)
-      '#00552F', // 0.53: Service 1 hold (deep forest green)
-      '#F6D5DE', // 0.57: Service 2 Skin Treatment (soft blush pink)
-      '#F6D5DE', // 0.64: Service 2 hold (soft blush pink)
-      '#FAF3ED', // 0.68: Service 3 Facial (warm cream)
-      '#FAF3ED', // 0.76: Service 3 hold (warm cream)
-      '#C56882', // 0.80: Service 4 Anti-Ageing (muted rose)
-      '#C56882', // 0.87: Service 4 hold (muted rose)
-      '#D1C4B5', // 0.91: Service 5 Slimming (cashmere taupe)
-      '#D1C4B5', // 0.96: Service 5 hold (cashmere taupe)
-      '#E63886', // 0.98: Service 6 Semi-Permanent Makeup (brand pink)
-      '#E63886', // 1.00: Service 6 hold (brand pink)
+      '#E63886', // 0.34: Video showcase hold (vivid pink)
+      '#00552F', '#00552F', // Service 0: Hair Treatment (deep forest green)
+      '#F6D5DE', '#F6D5DE', // Service 1: Skin Treatment (soft blush pink)
+      '#FAF3ED', '#FAF3ED', // Service 2: Facial (warm cream)
+      '#C56882', '#C56882', // Service 3: Anti-Ageing (muted rose)
+      '#D1C4B5', '#D1C4B5', // Service 4: Slimming (cashmere taupe)
+      '#E63886', '#E63886', // Service 5: Semi-Permanent Makeup (brand pink)
     ]
   );
 
@@ -107,9 +100,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   // Reactive listener to toggle header contrast buttons when on dark background stages:
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     const isDark =
-      (latest >= 0.20 && latest <= 0.56) ||
-      (latest >= 0.76 && latest <= 0.86) ||
-      (latest >= 0.96);
+      (latest >= 0.20 && latest <= 0.54) ||
+      (latest >= 0.74 && latest <= 0.84) ||
+      (latest >= 0.94);
     setIsPinkTheme(isDark);
     setIsBottomInteractive(latest < 0.10);
   });

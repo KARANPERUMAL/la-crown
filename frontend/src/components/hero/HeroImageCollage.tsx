@@ -256,7 +256,7 @@ export const HeroImageCollage: React.FC<HeroImageCollageProps> = ({
   );
   const videoCardOpacity = useTransform(
     scrollYProgress,
-    [0.13, 0.20, 0.54, 0.56],
+    [0.13, 0.20, 0.49, 0.51],
     [0.0, 1.0, 1.0, 0.0]
   );
 
@@ -329,17 +329,17 @@ export const HeroImageCollage: React.FC<HeroImageCollageProps> = ({
     }
     prevProgress.current = latest;
 
-    // Determine active service index (0 to 5) matching the stacked arrival keyframes
+    // Determine active service index (0 to 5) with zero artificial hold time
     let sIndex = 0;
-    if (latest >= 0.985) sIndex = 5;
-    else if (latest >= 0.915) sIndex = 4;
-    else if (latest >= 0.815) sIndex = 3;
-    else if (latest >= 0.70) sIndex = 2;
-    else if (latest >= 0.57) sIndex = 1;
+    if (latest >= 0.95) sIndex = 5;
+    else if (latest >= 0.85) sIndex = 4;
+    else if (latest >= 0.75) sIndex = 3;
+    else if (latest >= 0.65) sIndex = 2;
+    else if (latest >= 0.55) sIndex = 1;
     else sIndex = 0;
 
     setActiveServiceIndex(sIndex);
-    setIsServicesActive(latest >= 0.38);
+    setIsServicesActive(latest >= 0.36);
   });
 
   const togglePlay = (e: React.MouseEvent) => {
@@ -367,12 +367,12 @@ export const HeroImageCollage: React.FC<HeroImageCollageProps> = ({
   // =========================================================================
   const serviceLeftY = useTransform(
     scrollYProgress,
-    [0.14, 0.24, 0.34, 0.41],
+    [0.14, 0.24, 0.34, 0.38],
     shouldReduceMotion ? [0, 0, 0, 0] : [160, 0, 0, -560]
   );
   const serviceLeftOpacity = useTransform(
     scrollYProgress,
-    [0.14, 0.20, 0.39, 0.41],
+    [0.14, 0.20, 0.35, 0.38],
     [0, 1, 1, 0]
   );
   const serviceLeftX = useTransform(
@@ -383,12 +383,12 @@ export const HeroImageCollage: React.FC<HeroImageCollageProps> = ({
 
   const serviceRightY = useTransform(
     scrollYProgress,
-    [0.16, 0.26, 0.34, 0.41],
+    [0.16, 0.26, 0.34, 0.38],
     shouldReduceMotion ? [0, 0, 0, 0] : [160, 0, 0, -560]
   );
   const serviceRightOpacity = useTransform(
     scrollYProgress,
-    [0.16, 0.22, 0.39, 0.41],
+    [0.16, 0.22, 0.35, 0.38],
     [0, 1, 1, 0]
   );
   const serviceRightX = useTransform(
@@ -400,78 +400,63 @@ export const HeroImageCollage: React.FC<HeroImageCollageProps> = ({
   // Mobile vertical motion for pink headings (<1024px)
   const serviceMobileTopY = useTransform(
     scrollYProgress,
-    [0.14, 0.24, 0.34, 0.41],
+    [0.14, 0.24, 0.34, 0.38],
     shouldReduceMotion ? [0, 0, 0, 0] : [50, 0, 0, -320]
   );
   const serviceMobileBottomY = useTransform(
     scrollYProgress,
-    [0.16, 0.26, 0.34, 0.41],
+    [0.16, 0.26, 0.34, 0.38],
     shouldReduceMotion ? [0, 0, 0, 0] : [50, 0, 0, -320]
   );
 
   // =========================================================================
-  // STAGE 5: SERVICES SHOWCASE (Scroll 0.41 to 1.00)
-  //
-  // 1. Left-Side Service Information: enters cleanly from below (0.41 to 0.48)
-  //    only AFTER video-stage headings have exited through the top edge.
-  // 2. Service Cards: enter from the right (0.41 to 0.48) directly into
-  //    the central anchor to cover and replace the stationary video card!
-  // 3. Horizontal translation maps through the 6 service cards (0.48 to 0.93).
+  // STAGE 5: SERVICES SHOWCASE (Scroll 0.36 to 1.00)
+  // Continuous scroll-driven transition: zero artificial hold time!
+  // Each card glides directly into center and stacks cleanly over previous cards.
   // =========================================================================
 
   // Left-Side Service Info Container: enters smoothly from below into left flank
   const servicesInfoY = useTransform(
     scrollYProgress,
-    [0.38, 0.44],
+    [0.34, 0.38],
     shouldReduceMotion ? [0, 0] : [260, 0]
   );
   const servicesInfoOpacity = useTransform(
     scrollYProgress,
-    [0.38, 0.43],
+    [0.34, 0.38],
     [0, 1]
   );
 
-  // Services Gallery Container Opacity: fades in cleanly at 0.38 - 0.42
+  // Services Gallery Container Opacity: fades in cleanly at 0.34 - 0.38
   const galleryOpacity = useTransform(
     scrollYProgress,
-    [0.38, 0.42],
+    [0.34, 0.38],
     [0, 1]
   );
 
   // Desktop Horizontal Pitch: 310px pitch (285px card width + 25px clear visual gap)
+  // Zero artificial hold interval: immediately transitions to next card upon center arrival!
   const DESKTOP_PITCH = 310;
   const trainPositionDesktop = useTransform(
     scrollYProgress,
     [
-      0.38, // Card 0 starts outside right edge (+760px)
+      0.36, // Card 0 starts outside right edge (+760px)
       0.50, // Card 0 reaches 0px (exact center overlay over video card)
-      0.56, // Card 0 holds at center
-      0.63, // Card 1 reaches 0px (train at -310px)
-      0.67, // Card 1 holds at center
-      0.74, // Card 2 reaches 0px (train at -620px)
-      0.79, // Card 2 holds at center
-      0.85, // Card 3 reaches 0px (train at -930px)
-      0.90, // Card 3 holds at center
-      0.95, // Card 4 reaches 0px (train at -1240px)
-      0.97, // Card 4 holds at center
-      0.99, // Card 5 reaches 0px (train at -1550px)
-      1.00, // Card 5 holds at center
+      0.60, // Card 1 reaches 0px (train at -310px)
+      0.70, // Card 2 reaches 0px (train at -620px)
+      0.80, // Card 3 reaches 0px (train at -930px)
+      0.90, // Card 4 reaches 0px (train at -1240px)
+      1.00, // Card 5 reaches 0px (train at -1550px)
     ],
     shouldReduceMotion
-      ? [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ? [0, 0, 0, 0, 0, 0, 0]
       : [
           760,
           0,
-          0,
-          -1 * DESKTOP_PITCH,
           -1 * DESKTOP_PITCH,
           -2 * DESKTOP_PITCH,
-          -2 * DESKTOP_PITCH,
-          -3 * DESKTOP_PITCH,
           -3 * DESKTOP_PITCH,
           -4 * DESKTOP_PITCH,
-          -4 * DESKTOP_PITCH,
-          -5 * DESKTOP_PITCH,
           -5 * DESKTOP_PITCH,
         ]
   );
@@ -481,35 +466,23 @@ export const HeroImageCollage: React.FC<HeroImageCollageProps> = ({
   const trainPositionMobile = useTransform(
     scrollYProgress,
     [
-      0.38,
+      0.36,
       0.50,
-      0.56,
-      0.63,
-      0.67,
-      0.74,
-      0.79,
-      0.85,
+      0.60,
+      0.70,
+      0.80,
       0.90,
-      0.95,
-      0.97,
-      0.99,
       1.00,
     ],
     shouldReduceMotion
-      ? [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      ? [0, 0, 0, 0, 0, 0, 0]
       : [
           600,
           0,
-          0,
-          -1 * MOBILE_PITCH,
           -1 * MOBILE_PITCH,
           -2 * MOBILE_PITCH,
-          -2 * MOBILE_PITCH,
-          -3 * MOBILE_PITCH,
           -3 * MOBILE_PITCH,
           -4 * MOBILE_PITCH,
-          -4 * MOBILE_PITCH,
-          -5 * MOBILE_PITCH,
           -5 * MOBILE_PITCH,
         ]
   );
@@ -523,13 +496,13 @@ export const HeroImageCollage: React.FC<HeroImageCollageProps> = ({
   const servicesHeadingColor = useTransform(
     scrollYProgress,
     [
-      0.36,
-      0.38, 0.55, // Service 1 (Hair Treatment): #00552F (dark) -> text #FFF8F6
-      0.57, 0.66, // Service 2 (Skin Treatment): #F6D5DE (light) -> text #00552F
-      0.69, 0.78, // Service 3 (Facial): #FAF3ED (light) -> text #00552F
-      0.80, 0.89, // Service 4 (Anti-Ageing): #C56882 (dark) -> text #FFF8F6
-      0.91, 0.96, // Service 5 (Slimming): #D1C4B5 (light) -> text #00552F
-      0.98, 1.00, // Service 6 (Semi-Permanent): #E63886 (dark) -> text #FFF8F6
+      0.34,
+      0.38, 0.52, // Service 0 (Hair Treatment): #00552F (dark) -> text #FFF8F6
+      0.57, 0.62, // Service 1 (Skin Treatment): #F6D5DE (light) -> text #00552F
+      0.67, 0.72, // Service 2 (Facial): #FAF3ED (light) -> text #00552F
+      0.77, 0.82, // Service 3 (Anti-Ageing): #C56882 (dark) -> text #FFF8F6
+      0.87, 0.92, // Service 4 (Slimming): #D1C4B5 (light) -> text #00552F
+      0.97, 1.00, // Service 5 (Semi-Permanent): #E63886 (dark) -> text #FFF8F6
     ],
     [
       '#FFF8F6',
