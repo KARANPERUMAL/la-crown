@@ -7,7 +7,6 @@ import { HeroHeader } from '../ui/HeroHeader';
 import { MenuDrawer } from '../ui/MenuDrawer';
 import { WhatsAppModal } from '../ui/WhatsAppModal';
 import { BookingModal } from '../ui/BookingModal';
-import { RotateCcw, Calendar, ArrowUpRight } from 'lucide-react';
 
 export interface HeroSectionProps {
   onOpenBooking?: () => void;
@@ -23,7 +22,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [internalMenuOpen, setInternalMenuOpen] = useState(false);
   const [internalWhatsAppOpen, setInternalWhatsAppOpen] = useState(false);
   const [internalBookingOpen, setInternalBookingOpen] = useState(false);
-  const [animationKey, setAnimationKey] = useState(0);
+  const [animationKey] = useState(0);
   const [isPinkTheme, setIsPinkTheme] = useState(false);
   const [isBottomInteractive, setIsBottomInteractive] = useState(true);
 
@@ -86,10 +85,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const headlineY = useTransform(scrollYProgress, [0.0, 0.18], [-100, -420]);
   const headlineOpacity = useTransform(scrollYProgress, [0.0, 0.14, 0.18], [1, 1, 0]);
 
-  // Right-side boutique actions travel continuously UPWARD through the viewport
-  const boutiqueY = useTransform(scrollYProgress, [0.0, 0.18], [0, -360]);
-  const boutiqueOpacity = useTransform(scrollYProgress, [0.0, 0.14, 0.18], [1, 1, 0]);
-
   // Subtle vertical centering adjustment for collage as wordmark leaves, holding throughout showcase & all services
   const collageTranslateY = useTransform(
     scrollYProgress,
@@ -106,11 +101,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     setIsPinkTheme(isDark);
     setIsBottomInteractive(latest < 0.10);
   });
-
-  const handleReplayAnimation = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setAnimationKey((prev) => prev + 1);
-  };
 
   return (
     <div ref={containerRef} className="relative w-full h-[850vh]">
@@ -150,9 +140,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           />
         </motion.div>
 
-        {/* BOTTOM REGION: Clinic Headline (Left) & Refined Boutique Actions (Right) */}
+        {/* BOTTOM REGION: Clinic Headline (Left) */}
         <div
-          className={`relative z-[15] w-full px-6 pb-5 sm:px-8 sm:pb-6 md:px-12 md:pb-6 lg:pb-7 flex flex-col md:flex-row md:items-end justify-between gap-4 ${
+          className={`relative z-[15] w-full px-6 pb-5 sm:px-8 sm:pb-6 md:px-12 md:pb-6 lg:pb-7 flex flex-col md:flex-row md:items-end justify-between ${
             isBottomInteractive ? 'pointer-events-auto' : 'pointer-events-none'
           }`}
         >
@@ -162,42 +152,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             className="pointer-events-auto max-w-lg -translate-y-4 sm:-translate-y-5"
           >
             <ClinicHeadline onOpenBooking={handleOpenBooking} />
-          </motion.div>
-
-          {/* Lower-Right: Minimal Boutique Actions move UPWARD */}
-          <motion.div
-            style={{ y: boutiqueY, opacity: boutiqueOpacity }}
-            className="pointer-events-auto flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-2 text-left md:text-right"
-          >
-            {/* Action Controls */}
-            <div className="flex items-center gap-2">
-              {/* Replay Reveal Trigger */}
-              <button
-                type="button"
-                onClick={handleReplayAnimation}
-                title="Scroll to top and replay reveal"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FCE7EE]/90 hover:bg-[#F9D0DF] border border-[#F4DCE3] text-[#00552F] text-xs font-semibold tracking-wide transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-[#00552F] cursor-pointer"
-              >
-                <RotateCcw className="w-3.5 h-3.5 text-[#E63886]" />
-                <span>Replay Reveal</span>
-              </button>
-
-              {/* Quick Consultation CTA */}
-              <button
-                type="button"
-                onClick={handleOpenBooking}
-                className="group flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#00552F] hover:bg-[#003E22] text-[#FFF8F6] text-xs font-semibold tracking-wide transition-all shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-[#00552F] cursor-pointer"
-              >
-                <Calendar className="w-3.5 h-3.5 text-[#F49AB9]" />
-                <span>Consultation</span>
-                <ArrowUpRight className="w-3.5 h-3.5 text-[#F49AB9] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
-            </div>
-
-            {/* Boutique Coordinates */}
-            <p className="text-[11px] text-[#8F7A82] tracking-wide">
-              Suite 400 &bull; Aesthetic Medicine &bull; Mon–Sat 9AM–8PM
-            </p>
           </motion.div>
         </div>
 

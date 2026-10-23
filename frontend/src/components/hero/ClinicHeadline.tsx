@@ -5,7 +5,7 @@ interface ClinicHeadlineProps {
   onOpenBooking?: () => void;
 }
 
-export const ClinicHeadline: React.FC<ClinicHeadlineProps> = ({ onOpenBooking }) => {
+export const ClinicHeadline: React.FC<ClinicHeadlineProps> = () => {
   return (
     <div className="relative z-30 select-none max-w-2xl pointer-events-auto">
       {/* Eyebrow Label */}
@@ -59,27 +59,6 @@ export const ClinicHeadline: React.FC<ClinicHeadlineProps> = ({ onOpenBooking })
           </span>
         </motion.div>
       </div>
-
-      {/* Subtle Micro-Tagline & Quick Consultation Link */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
-        className="mt-3 sm:mt-4 flex flex-wrap items-center gap-3 sm:gap-4 text-xs text-[#7A666D]"
-      >
-        <span className="inline-flex items-center gap-1.5 font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#E63886]" />
-          Science-Backed Skin Rejuvenation
-        </span>
-        {onOpenBooking && (
-          <button
-            onClick={onOpenBooking}
-            className="text-[#00552F] font-semibold hover:text-[#E63886] transition-colors underline underline-offset-4 cursor-pointer text-xs"
-          >
-            Book Consultation &rarr;
-          </button>
-        )}
-      </motion.div>
     </div>
   );
 };
